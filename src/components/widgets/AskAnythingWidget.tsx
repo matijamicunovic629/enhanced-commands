@@ -3,6 +3,7 @@ import { Mic, Send, History, Star, FileText, ChevronDown } from 'lucide-react';
 import { useStore } from '../../store/useStore';
 import { VoiceModal } from '../VoiceModal';
 import { QuickInfoModal } from '../QuickInfoModal';
+import { LoadingModal } from '../LoadingModal';
 import { useCommandCenterStore } from '../../store/commandCenterStore';
 import { CommandHistory } from '../CommandHistory';
 import { FavoriteCommands } from '../FavoriteCommands';
@@ -31,6 +32,11 @@ export const AskAnythingWidget: React.FC = () => {
   const [quickInfoCommandType, setQuickInfoCommandType] = useState<'price' | 'yield' | 'swap'>('price');
   const [quickInfoSwapData, setQuickInfoSwapData] = useState<any>(null);
   const [quickInfoDcaData, setQuickInfoDcaData] = useState<any>(null);
+  
+  // Loading modal state
+  const [showLoadingModal, setShowLoadingModal] = useState(false);
+  const [loadingQuery, setLoadingQuery] = useState('');
+  const [loadingType, setLoadingType] = useState<'general' | 'price' | 'news' | 'trending' | 'swap' | 'dca' | 'yield'>('general');
   
   // Command Center state
   const {
@@ -223,6 +229,10 @@ export const AskAnythingWidget: React.FC = () => {
   const processCommand = (text: string) => {
     const normalizedText = text.toLowerCase().trim();
     
+    // Show loading modal immediately
+    setLoadingQuery(text);
+    setShowLoadingModal(true);
+    
     // Debug logging for DCA commands
     console.log('AskAnything: Processing command:', text);
     console.log('AskAnything: Normalized text:', normalizedText);
@@ -239,14 +249,15 @@ export const AskAnythingWidget: React.FC = () => {
     for (const pattern of trendingPatterns) {
       if (pattern.test(normalizedText)) {
         console.log('AskAnything: Trending command matched!');
+        setLoadingType('trending');
         setQuickInfoQuery(text);
         setQuickInfoCoinId(null);
         setQuickInfoCommandType('trending');
         setQuickInfoSwapData(null);
         setQuickInfoDcaData(null);
-        setShowQuickInfo(true);
-        setIsProcessing(true);
         setTimeout(() => {
+          setShowLoadingModal(false);
+          setShowQuickInfo(true);
           setIsProcessing(false);
           setTranscript('');
         }, 1500);
@@ -272,12 +283,13 @@ export const AskAnythingWidget: React.FC = () => {
     if (dcaMatch) {
       console.log('AskAnything: DCA command matched!', dcaMatch);
       const [, amount, token, frequency] = dcaMatch;
+      setLoadingType('dca');
       setQuickInfoDcaData({ amount, token: token.toUpperCase(), frequency });
       setQuickInfoCommandType('dca');
       setQuickInfoQuery(text);
-      setShowQuickInfo(true);
-      setIsProcessing(true);
       setTimeout(() => {
+        setShowLoadingModal(false);
+        setShowQuickInfo(true);
         setIsProcessing(false);
         setTranscript('');
       }, 1500);
@@ -288,12 +300,13 @@ export const AskAnythingWidget: React.FC = () => {
     if (normalizedText.includes('create') && normalizedText.includes('dca')) {
       console.log('AskAnything: Simple DCA pattern matched');
       // Default values for simple DCA
+      setLoadingType('dca');
       setQuickInfoDcaData({ amount: '10', token: 'ETH', frequency: 'daily' });
       setQuickInfoCommandType('dca');
       setQuickInfoQuery(text);
-      setShowQuickInfo(true);
-      setIsProcessing(true);
       setTimeout(() => {
+        setShowLoadingModal(false);
+        setShowQuickInfo(true);
         setIsProcessing(false);
         setTranscript('');
       }, 1500);
@@ -304,14 +317,15 @@ export const AskAnythingWidget: React.FC = () => {
     // Check for news queries first
     for (const pattern of newsQueryPatterns) {
       if (pattern.test(normalizedText)) {
+        setLoadingType('news');
         setQuickInfoQuery(text);
         setQuickInfoCoinId(null);
         setQuickInfoCommandType('news');
         setQuickInfoDcaData(null);
         setQuickInfoSwapData(null);
-        setShowQuickInfo(true);
-        setIsProcessing(true);
         setTimeout(() => {
+          setShowLoadingModal(false);
+          setShowQuickInfo(true);
           setIsProcessing(false);
           setTranscript('');
         }, 1500);
@@ -324,6 +338,7 @@ export const AskAnythingWidget: React.FC = () => {
       const match = normalizedText.match(pattern);
       if (match) {
         const [, fromAmount, fromToken, toToken] = match;
+        setLoadingType('swap');
         setQuickInfoQuery(text);
         setQuickInfoCoinId(null);
         setQuickInfoCommandType('swap');
@@ -334,9 +349,9 @@ export const AskAnythingWidget: React.FC = () => {
           toAmount: '0.0223', // Fixed amount for ETH
           toToken: toToken.toUpperCase()
         });
-        setShowQuickInfo(true);
-        setIsProcessing(true);
         setTimeout(() => {
+          setShowLoadingModal(false);
+          setShowQuickInfo(true);
           setIsProcessing(false);
           setTranscript('');
         }, 1500);
@@ -347,14 +362,15 @@ export const AskAnythingWidget: React.FC = () => {
     // Check for yield queries first
     for (const pattern of yieldQueryPatterns) {
       if (pattern.test(normalizedText)) {
+        setLoadingType('yield');
         setQuickInfoQuery(text);
         setQuickInfoCoinId(null);
         setQuickInfoCommandType('yield');
         setQuickInfoDcaData(null);
         setQuickInfoSwapData(null);
-        setShowQuickInfo(true);
-        setIsProcessing(true);
         setTimeout(() => {
+          setShowLoadingModal(false);
+          setShowQuickInfo(true);
           setIsProcessing(false);
           setTranscript('');
         }, 1500);
@@ -373,14 +389,15 @@ export const AskAnythingWidget: React.FC = () => {
             // Try to find matching coin
             for (const { pattern, coinId } of cryptoPricePatterns) {
               if (pattern.test(`${args} price`)) {
+                setLoadingType('price');
                 setQuickInfoQuery(text);
                 setQuickInfoCoinId(coinId);
                 setQuickInfoCommandType('price');
                 setQuickInfoDcaData(null);
                 setQuickInfoSwapData(null);
-                setShowQuickInfo(true);
-                setIsProcessing(true);
                 setTimeout(() => {
+                  setShowLoadingModal(false);
+                  setShowQuickInfo(true);
                   setIsProcessing(false);
                   setTranscript('');
                 }, 1500);
@@ -390,63 +407,77 @@ export const AskAnythingWidget: React.FC = () => {
           }
           break;
         case 'yield':
+          setLoadingType('yield');
           setQuickInfoQuery(text);
           setQuickInfoCoinId(null);
           setQuickInfoCommandType('yield');
           setQuickInfoDcaData(null);
           setQuickInfoSwapData(null);
-          setShowQuickInfo(true);
-          setIsProcessing(true);
           setTimeout(() => {
+            setShowLoadingModal(false);
+            setShowQuickInfo(true);
             setIsProcessing(false);
             setTranscript('');
           }, 1500);
           return true;
         case 'swap':
+          setShowLoadingModal(false);
           setIsSwapOpen(true);
           return true;
         case 'send':
+          setShowLoadingModal(false);
           setIsWalletOpen(true);
           return true;
         case 'stake':
+          setShowLoadingModal(false);
           setIsDefiOpen(true);
           return true;
         case 'bridge':
+          setShowLoadingModal(false);
           setIsAIAgentOpen(true);
           return true;
         case 'portfolio':
+          setShowLoadingModal(false);
           setIsDashboardOpen(true);
           return true;
         case 'yield':
+          setShowLoadingModal(false);
           setIsAIAgentOpen(true);
           return true;
         case 'news':
+          setShowLoadingModal(false);
           openMarketDataSection('news');
           return true;
         case 'news':
+          setLoadingType('news');
           setQuickInfoQuery(text);
           setQuickInfoCoinId(null);
           setQuickInfoCommandType('news');
-          setShowQuickInfo(true);
-          setIsProcessing(true);
           setTimeout(() => {
+            setShowLoadingModal(false);
+            setShowQuickInfo(true);
             setIsProcessing(false);
             setTranscript('');
           }, 1500);
           return true;
         case 'trending':
+          setShowLoadingModal(false);
           openMarketDataSection('trending');
           return true;
         case 'dashboard':
+          setShowLoadingModal(false);
           setIsDashboardOpen(true);
           return true;
         case 'defi':
+          setShowLoadingModal(false);
           setIsDefiOpen(true);
           return true;
         case 'games':
+          setShowLoadingModal(false);
           setIsGamesOpen(true);
           return true;
         case 'settings':
+          setShowLoadingModal(false);
           setIsSettingsOpen(true);
           return true;
       }
@@ -455,14 +486,15 @@ export const AskAnythingWidget: React.FC = () => {
     // Check for crypto price queries first
     for (const { pattern, coinId } of cryptoPricePatterns) {
       if (pattern.test(normalizedText)) {
+        setLoadingType('price');
         setQuickInfoQuery(text);
         setQuickInfoCoinId(coinId);
         setQuickInfoCommandType('price');
         setQuickInfoDcaData(null);
         setQuickInfoSwapData(null);
-        setShowQuickInfo(true);
-        setIsProcessing(true);
         setTimeout(() => {
+          setShowLoadingModal(false);
+          setShowQuickInfo(true);
           setIsProcessing(false);
           setTranscript('');
         }, 1500);
@@ -473,9 +505,10 @@ export const AskAnythingWidget: React.FC = () => {
     // Check for voice commands
     for (const { command, action } of voiceCommands) {
       if (normalizedText.includes(command)) {
-        setIsProcessing(true);
+        setLoadingType('general');
         action();
         setTimeout(() => {
+          setShowLoadingModal(false);
           setIsProcessing(false);
           setTranscript('');
         }, 1500);
@@ -484,6 +517,7 @@ export const AskAnythingWidget: React.FC = () => {
     }
 
     // Fallback to AI Agent for complex queries
+    setShowLoadingModal(false);
     setIsAIAgentOpen(true);
     return false;
   };
@@ -761,6 +795,12 @@ export const AskAnythingWidget: React.FC = () => {
           { command: "Open trending", description: "View trending tokens" },
           { command: "Open news", description: "Latest crypto news" }
         ]}
+      />
+
+      <LoadingModal
+        isOpen={showLoadingModal}
+        query={loadingQuery}
+        processingType={loadingType}
       />
 
       <QuickInfoModal
