@@ -800,7 +800,7 @@ export const AskAnythingWidget: React.FC = () => {
       <LoadingModal
         isOpen={true}
         query={loadingQuery}
-        processingType={loadingType}
+        processingType={'general'}
       />
 
       <QuickInfoModal
