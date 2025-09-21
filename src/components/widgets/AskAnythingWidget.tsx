@@ -798,7 +798,7 @@ export const AskAnythingWidget: React.FC = () => {
       />
 
       <LoadingModal
-        isOpen={showLoadingModal}
+        isOpen={true}
         query={loadingQuery}
         processingType={loadingType}
       />
