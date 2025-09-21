@@ -1,0 +1,408 @@
+@import url('https://fonts.googleapis.com/css2?family=Exo:wght@300;400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --glass-bg-dark: rgba(16, 16, 18, 0.85);
+  --glass-bg-light: rgba(255, 255, 255, 0.85);
+  --glass-border-dark: rgba(255, 255, 255, 0.12);
+  --glass-border-light: rgba(0, 0, 0, 0.12);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Exo', sans-serif;
+  @apply min-h-screen overflow-x-hidden transition-colors duration-300;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+
+body[data-theme='dark'] {
+  @apply bg-[#0a0a0c] text-white;
+}
+
+body[data-theme='light'] {
+  @apply bg-gray-100 text-gray-900;
+}
+
+/* Glass styles for both themes */
+.glass {
+  @apply backdrop-blur-xl transition-colors duration-300;
+}
+
+body[data-theme='dark'] .glass {
+  background: var(--glass-bg-dark);
+  border-color: var(--glass-border-dark);
+}
+
+body[data-theme='light'] .glass {
+  background: var(--glass-bg-light);
+  border-color: var(--glass-border-light);
+}
+
+/* Theme-specific hover states */
+body[data-theme='light'] .hover\:bg-white\/10:hover {
+  @apply hover:bg-black/10;
+}
+
+body[data-theme='light'] .bg-white\/5 {
+  @apply bg-black/5;
+}
+
+body[data-theme='light'] .bg-white\/10 {
+  @apply bg-black/10;
+}
+
+body[data-theme='light'] .border-white\/10 {
+  @apply border-black/10;
+}
+
+/* Improved text visibility for light mode */
+body[data-theme='light'] .text-white {
+  @apply text-gray-900;
+}
+
+body[data-theme='light'] .text-white\/90 {
+  @apply text-gray-800;
+}
+
+body[data-theme='light'] .text-white\/80 {
+  @apply text-gray-700;
+}
+
+body[data-theme='light'] .text-white\/60 {
+  @apply text-gray-600;
+}
+
+body[data-theme='light'] .text-white\/40 {
+  @apply text-gray-500;
+}
+
+body[data-theme='light'] .text-white\/20 {
+  @apply text-gray-400;
+}
+
+/* Placeholder text in light mode */
+body[data-theme='light'] .placeholder\:text-white\/40::placeholder {
+  @apply text-gray-400;
+}
+
+/* Voice wave animation */
+@keyframes voice-wave {
+  0%, 100% {
+    transform: scaleY(0.2);
+  }
+  50% {
+    transform: scaleY(1);
+  }
+}
+
+.animate-voice-wave {
+  animation: voice-wave 1s ease-in-out infinite;
+}
+
+/* Slide up animation */
+@keyframes slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-slide-up {
+  animation: slide-up 0.3s ease-out forwards;
+}
+
+/* Fade in animation */
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.3s ease-out forwards;
+}
+
+/* Custom scrollbar styles */
+.ai-chat-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+}
+
+body[data-theme='light'] .ai-chat-scrollbar {
+  scrollbar-color: rgba(0, 0, 0, 0.2) transparent;
+}
+
+.ai-chat-scrollbar::-webkit-scrollbar {
+  width: 4px;
+}
+
+.ai-chat-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.ai-chat-scrollbar::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.2);
+  border-radius: 2px;
+  transition: background-color 0.2s;
+}
+
+body[data-theme='light'] .ai-chat-scrollbar::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.2);
+}
+
+.ai-chat-scrollbar::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(255, 255, 255, 0.3);
+}
+
+body[data-theme='light'] .ai-chat-scrollbar::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(0, 0, 0, 0.3);
+}
+
+/* Token dropdown scrollbar */
+.token-dropdown-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+}
+
+body[data-theme='light'] .token-dropdown-scrollbar {
+  scrollbar-color: rgba(0, 0, 0, 0.2) transparent;
+}
+
+.token-dropdown-scrollbar::-webkit-scrollbar {
+  width: 4px;
+}
+
+.token-dropdown-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+  margin: 2px;
+}
+
+.token-dropdown-scrollbar::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+body[data-theme='light'] .token-dropdown-scrollbar::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.2);
+}
+
+.token-dropdown-scrollbar::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(255, 255, 255, 0.3);
+}
+
+body[data-theme='light'] .token-dropdown-scrollbar::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(0, 0, 0, 0.3);
+}
+
+/* Settings modal scrollbar */
+.settings-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+}
+
+body[data-theme='light'] .settings-scrollbar {
+  scrollbar-color: rgba(0, 0, 0, 0.2) transparent;
+}
+
+.settings-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.settings-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+  margin: 4px 0;
+}
+
+.settings-scrollbar::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.2);
+  border-radius: 3px;
+  transition: background-color 0.2s;
+}
+
+body[data-theme='light'] .settings-scrollbar::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.2);
+}
+
+.settings-scrollbar::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(255, 255, 255, 0.3);
+}
+
+body[data-theme='light'] .settings-scrollbar::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(0, 0, 0, 0.3);
+}
+
+/* Market Cap table scrollbar */
+.market-cap-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+}
+
+body[data-theme='light'] .market-cap-scrollbar {
+  scrollbar-color: rgba(0, 0, 0, 0.2) transparent;
+}
+
+.market-cap-scrollbar::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.market-cap-scrollbar::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 3px;
+}
+
+.market-cap-scrollbar::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.2);
+  border-radius: 3px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+  transition: background-color 0.2s;
+}
+
+body[data-theme='light'] .market-cap-scrollbar::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.2);
+}
+
+.market-cap-scrollbar::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(255, 255, 255, 0.3);
+}
+
+body[data-theme='light'] .market-cap-scrollbar::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(0, 0, 0, 0.3);
+}
+
+.market-cap-scrollbar::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+/* Notification dropdown scrollbar */
+.notification-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+}
+
+body[data-theme='light'] .notification-scrollbar {
+  scrollbar-color: rgba(0, 0, 0, 0.2) transparent;
+}
+
+.notification-scrollbar::-webkit-scrollbar {
+  width: 4px;
+}
+
+.notification-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+  margin: 2px 0;
+}
+
+.notification-scrollbar::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.2);
+  border-radius: 2px;
+  transition: background-color 0.2s;
+}
+
+body[data-theme='light'] .notification-scrollbar::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.2);
+}
+
+.notification-scrollbar::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(255, 255, 255, 0.3);
+}
+
+body[data-theme='light'] .notification-scrollbar::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(0, 0, 0, 0.3);
+}
+
+.widget {
+  @apply rounded-xl glass shadow-lg transition-transform;
+  min-height: 180px;
+  min-width: 220px;
+}
+
+/* Widget-specific styles */
+.widget-header {
+  @apply flex items-center justify-between p-2 border-b border-white/10 text-sm;
+}
+
+.widget-content {
+  @apply p-3;
+}
+
+.widget-title {
+  @apply text-base font-medium;
+}
+
+.widget-subtitle {
+  @apply text-xs text-white/60;
+}
+
+.widget-value {
+  @apply text-lg font-medium;
+}
+
+.widget-stat {
+  @apply text-xs;
+}
+
+.widget-card {
+  @apply p-2 bg-white/5 rounded-lg hover:bg-white/10 transition-colors;
+}
+
+.widget-list {
+  @apply space-y-2;
+}
+
+.widget-grid {
+  @apply grid gap-2;
+}
+
+.widget-button {
+  @apply px-3 py-1.5 text-sm rounded-lg transition-colors;
+}
+
+.widget-input {
+  @apply bg-white/5 px-3 py-1.5 text-sm rounded-lg outline-none;
+}
+
+.widget-label {
+  @apply text-xs text-white/60;
+}
+
+.widget-icon {
+  @apply w-4 h-4;
+}
+
+.widget-badge {
+  @apply px-2 py-0.5 text-xs rounded-full;
+}
+
+/* Add padding to sections for smooth scrolling */
+section[id] {
+  scroll-margin-top: 80px;
+}
+
+/* Token Tycoon specific styles */
+@keyframes marquee {
+  0% { transform: translateX(100%); }
+  100% { transform: translateX(-100%); }
+}
+.animate-marquee {
+  display: inline-block;
+  animation: marquee 20s linear infinite;
+}
